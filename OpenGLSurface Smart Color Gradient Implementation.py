@@ -12,6 +12,7 @@ class WavePackets(ThreeDScene):
         radius_tracker = ValueTracker(0.1) 
         angle_tracker = ValueTracker(0.0)   
 
+        ## Defining initial surface function
         def uv_surface(u, v):
             theta = angle_tracker.get_value()
             r = radius_tracker.get_value()
@@ -29,6 +30,7 @@ class WavePackets(ThreeDScene):
             resolution=(101, 101),
         )
 
+        ## Color Function: Returns value from -1 to 1 which will be put into .set_color_by_func()
         def two_gaussian_color_func(x, y, z):
             theta = angle_tracker.get_value()
             r = radius_tracker.get_value()
@@ -47,6 +49,8 @@ class WavePackets(ThreeDScene):
         self.play(Create(wp1))
 
         def update_surface(surface):
+
+            ## Getting Surface Mesh Points
             nu, nv = surface.resolution
             u_vals = np.linspace(-5, 5, nu)
             v_vals = np.linspace(-5, 5, nv)
@@ -57,6 +61,7 @@ class WavePackets(ThreeDScene):
                 points_list.append(point_grid.reshape((nu*nv, 3)))
             surface.set_points(np.vstack(points_list))
 
+            ## Setting color of function for each frame
             surface.set_color_by_func(
                 two_gaussian_color_func,
                 colormap=("BLUE", "RED"),
