@@ -1,0 +1,21 @@
+class autozoom(MovingCameraScene):
+    def construct(self):
+        sq = Square()
+        circ = Circle()
+        self.add(sq,circ)
+        self.add(self.camera.frame)
+        def zoomUpdater(mobj):
+            self.mobjects.remove(mobj) # camera frame must not be in list
+            boundary_box = Group(*self.mobjects)
+            bb_aspect = boundary_box.width/boundary_box.height
+            camera_aspect = mobj.width/mobj.height
+            if bb_aspect >= camera_aspect:
+                mobj.scale_to_fit_width(boundary_box.width*1.05)
+            else:
+                mobj.scale_to_fit_height(boundary_box.height*1.05)
+            mobj.move_to(boundary_box.get_center())
+            self.add(mobj)
+        self.camera.frame.add_updater(zoomUpdater, call_updater=True)
+        self.wait()
+        self.play(Create(FunctionGraph(np.sin)))
+        self.wait()
