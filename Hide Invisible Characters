@@ -1,0 +1,11 @@
+def construct(self):
+    image = ImageMobject(np.uint8([[0, 100, 30, 200], [255, 0, 5, 33]]))
+    image.height = 8
+    self.add(image)
+
+    star = Star().scale(3).rotate(1)
+    char1 = always_redraw(lambda: Circle(3).move_to(LEFT * 4 * np.sin(self.time)))
+    char2 = always_redraw(lambda: Difference(star, char1, stroke_width=10))
+    char1.set_z_index(1) # force to render on top
+    self.add(char1, char2)
+    self.wait(4, frozen_frame=False)
